@@ -4,17 +4,14 @@ const AWS = require('aws-sdk');
 const fs = require('fs');
 const cred = require('./cred.js');
 const app = express();
-
 let sqlite = require('sqlite3').verbose();
 let Sequelize = require('sequelize');
+
 let sequelize = new Sequelize('sqlite:./db/artcamp.db', {
   logging: false,
 });
 
-app.use(express.static('public'));
-
 const BUCKET = 'art-camp-library';
-
 const storage = multer.diskStorage({
   destination: 'uploads/',
   filename: function (req, file, cb) {
@@ -31,13 +28,8 @@ AWS.config.update({
 
 const s3 = new AWS.S3();
 
-console.log('Region: ', AWS.config.region);
-
-const Library = sequelize.define('library', {
+const Art = sequelize.define('art', {
   filename: {
-    type: Sequelize.STRING,
-  },
-  s3url: {
     type: Sequelize.STRING,
   },
   artist: {
@@ -48,11 +40,6 @@ const Library = sequelize.define('library', {
     type: Sequelize.STRING,
     allowNull: false,
   },
-  uploaded: {
-    type: Sequelize.BOOLEAN,
-    allowNull: false,
-    defaultValue: false,
-  },
   year: {
     type: Sequelize.INTEGER,
     allowNull: false,
@@ -61,9 +48,17 @@ const Library = sequelize.define('library', {
 
 sequelize.sync();
 
+app.use(express.static('public'));
+
 app.post('/upload', upload.single('file'), (req, res) => {
   console.log(req.body);
   uploadFile(req.file.path, req.file.filename, res);
+  Art.create({
+    filename: req.file.filename,
+    artist: req.body.artist,
+    title: req.body.title,
+    year: req.body.year,
+  });
   res.send('<h1>Yuuuur!!</h1>');
 });
 
