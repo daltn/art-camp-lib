@@ -10,7 +10,6 @@ let Sequelize = require('sequelize');
 let sequelize = new Sequelize('sqlite:./db/artcamp.db', {
   logging: false,
 });
-
 const BUCKET = 'art-camp-library';
 const storage = multer.diskStorage({
   destination: 'uploads/',
