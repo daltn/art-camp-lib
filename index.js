@@ -6,11 +6,14 @@ const cred = require('./cred.js');
 const app = express();
 let sqlite = require('sqlite3').verbose();
 let Sequelize = require('sequelize');
+const basicAuth = require('express-basic-auth');
 
-let sequelize = new Sequelize('sqlite:./db/artcamp.db', {
+let sequelize = new Sequelize('sqlite:./db/catalog.db', {
   logging: false,
 });
+
 const BUCKET = 'art-camp-library';
+
 const storage = multer.diskStorage({
   destination: 'uploads/',
   filename: function (req, file, cb) {
@@ -27,7 +30,7 @@ AWS.config.update({
 
 const s3 = new AWS.S3();
 
-const Art = sequelize.define('art', {
+const Catalog = sequelize.define('catalog', {
   filename: {
     type: Sequelize.STRING,
   },
@@ -49,10 +52,22 @@ sequelize.sync();
 
 app.use(express.static('public'));
 
+function getUnauthorizedResponse(req) {
+  return req.auth ? 'Nope' : 'No credentials provided';
+}
+
+app.use(
+  basicAuth({
+    users: { admin: cred.password },
+    unauthorizedResponse: getUnauthorizedResponse,
+    challenge: true,
+  })
+);
+
 app.post('/upload', upload.single('file'), (req, res) => {
   console.log(req.body);
   uploadFile(req.file.path, req.file.filename, res);
-  Art.create({
+  Catalog.create({
     filename: req.file.filename,
     artist: req.body.artist,
     title: req.body.title,
@@ -61,9 +76,10 @@ app.post('/upload', upload.single('file'), (req, res) => {
   res.send('<h1>Yuuuur!!</h1>');
 });
 
-app.get('/get/:file', (req, res) => {
-  console.log(req.body);
-  retrieveFile(req.params.file, res);
+app.get('/get', (req, res) => {
+  Catalog.findOne({
+    order: sequelize.random(),
+  }).then((art) => res.send(JSON.stringify(art)));
 });
 
 async function uploadFile(source, targetName, res) {
@@ -89,23 +105,8 @@ async function uploadFile(source, targetName, res) {
 
   fs.unlink(source, (err) => console.log(err));
 
-  console.log('Success!');
+  console.log('Sweet!!!');
   // return res.send('<h1>Nice!!</h1>');
-}
-
-function retrieveFile(filename, res) {
-  const getParams = {
-    Bucket: BUCKET,
-    Key: filename,
-  };
-
-  s3.getObject(getParams, function (err, data) {
-    if (err) {
-      return res.status(400).send({ success: false, err: err });
-    } else {
-      return res.send(data.Body);
-    }
-  });
 }
 
 app.listen(3000, () =>
