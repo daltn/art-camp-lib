@@ -1,10 +1,10 @@
 const express = require('express');
 const multer = require('multer');
+const path = require('path');
 const AWS = require('aws-sdk');
 const fs = require('fs');
 const cred = require('./cred.js');
 const app = express();
-let sqlite = require('sqlite3').verbose();
 let Sequelize = require('sequelize');
 const basicAuth = require('express-basic-auth');
 
@@ -12,6 +12,13 @@ let sequelize = new Sequelize('sqlite:./db/catalog.db', {
   logging: false,
 });
 
+AWS.config.update({
+  accessKeyId: cred.access_id,
+  secretAccessKey: cred.secret,
+  region: 'us-east-1',
+});
+
+const s3 = new AWS.S3();
 const BUCKET = 'art-camp-library';
 
 const storage = multer.diskStorage({
@@ -21,14 +28,6 @@ const storage = multer.diskStorage({
   },
 });
 const upload = multer({ storage: storage });
-
-AWS.config.update({
-  accessKeyId: cred.access_id,
-  secretAccessKey: cred.secret,
-  region: 'us-east-1',
-});
-
-const s3 = new AWS.S3();
 
 const Catalog = sequelize.define('catalog', {
   filename: {
@@ -52,6 +51,13 @@ sequelize.sync();
 
 app.use(express.static('public'));
 
+app.get('/get', (req, res) => {
+  Catalog.findOne({
+    attributes: ['id', 'filename', 'artist', 'title', 'year'],
+    order: sequelize.random(),
+  }).then((art) => res.send(JSON.stringify(art)));
+});
+
 function getUnauthorizedResponse(req) {
   return req.auth ? 'Nope' : 'No credentials provided';
 }
@@ -64,6 +70,10 @@ app.use(
   })
 );
 
+app.get('/upload', (req, res) => {
+  res.sendFile('./admin/upload.html');
+});
+
 app.post('/upload', upload.single('file'), (req, res) => {
   console.log(req.body);
   uploadFile(req.file.path, req.file.filename, res);
@@ -74,12 +84,6 @@ app.post('/upload', upload.single('file'), (req, res) => {
     year: req.body.year,
   });
   res.send('<h1>Yuuuur!!</h1>');
-});
-
-app.get('/get', (req, res) => {
-  Catalog.findOne({
-    order: sequelize.random(),
-  }).then((art) => res.send(JSON.stringify(art)));
 });
 
 async function uploadFile(source, targetName, res) {

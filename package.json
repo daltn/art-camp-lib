@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "art camp library",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/daltn/art-camp-lib"
