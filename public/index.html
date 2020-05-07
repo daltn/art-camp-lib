@@ -7,11 +7,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="styles.css">
   </head>
-  <body onload="hey()">
-    <h1>Welcome 2 Art Camp Lib</h1>
-
-    <button onclick="getRandom()">get random</button>
-
-    <script src="script.js" async defer></script>
+  <body onload="init()">
+    <article class="flex">
+      <section>
+        <img
+          src=""
+          alt="first random art piece"
+          id="one"
+          onclick="getRandom(this.id)"
+        />
+      </section>
+      <section>
+        <img
+          src=""
+          alt="second random art piece"
+          id="two"
+          onclick="getRandom(this.id)"
+        />
+      </section>
+    </article>
+    <script src="scripts.js" async defer></script>
   </body>
 </html>
+
