@@ -1,11 +1,17 @@
 async function getRandom(img) {
+  let infoBlock;
+  if (img === 'one') {
+    infoBlock = document.querySelector(`.one-info`);
+  } else {
+    infoBlock = document.querySelector(`.two-info`);
+  }
   try {
     let response = await fetch(`http://localhost:3000/get`);
-    let { filename } = await response.json();
+    let { filename, artist, title, year } = await response.json();
     let node = document.getElementById(img);
-    console.log(node);
     let id = fileCheck(filename);
     node.src = `https://art-camp-library.s3.amazonaws.com/${id}`;
+    infoBlock.innerHTML = `${artist}, ${title}, ${year}`;
   } catch (e) {
     console.error(e);
   }
