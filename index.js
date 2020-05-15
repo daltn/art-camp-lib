@@ -32,6 +32,7 @@ const upload = multer({ storage: storage });
 const Catalog = sequelize.define('catalog', {
   filename: {
     type: Sequelize.STRING,
+    allowNull: false,
   },
   artist: {
     type: Sequelize.STRING,
