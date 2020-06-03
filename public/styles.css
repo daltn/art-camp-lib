@@ -31,7 +31,6 @@ h1 {
 }
 .flex section {
   width: 50%;
-  /* height: 98vh; */
 }
 .flex section:hover h1 {
   opacity: 1;
@@ -39,7 +38,7 @@ h1 {
 img {
   object-fit: cover;
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
 }
 img:hover {
   cursor: pointer;

@@ -1,4 +1,3 @@
-const serverless = require('serverless-http');
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
@@ -8,10 +7,16 @@ const cred = require('./cred.js');
 const app = express();
 let Sequelize = require('sequelize');
 const basicAuth = require('express-basic-auth');
+const compression = require('compression');
+const helmet = require('helmet');
 
 let sequelize = new Sequelize('sqlite:./db/catalog.db', {
   logging: false,
 });
+
+app.use(helmet());
+app.use(compression());
+app.use(express.static('public'));
 
 AWS.config.update({
   accessKeyId: cred.access_id,
@@ -51,8 +56,6 @@ const Catalog = sequelize.define('catalog', {
 
 sequelize.sync();
 
-app.use(express.static('public'));
-
 app.get('/get', (req, res) => {
   Catalog.findOne({
     attributes: ['id', 'filename', 'artist', 'title', 'year'],
@@ -64,17 +67,17 @@ function getUnauthorizedResponse(req) {
   return req.auth ? 'Nope' : 'No credentials provided';
 }
 
-// app.use(
-//   basicAuth({
-//     users: { admin: cred.password },
-//     unauthorizedResponse: getUnauthorizedResponse,
-//     challenge: true,
-//   })
-// );
-
-app.get('/upload', (req, res) => {
-  res.sendFile('./admin/upload.html');
-});
+app.get(
+  '/upload',
+  basicAuth({
+    users: { admin: cred.password },
+    unauthorizedResponse: getUnauthorizedResponse,
+    challenge: true,
+  }),
+  (req, res) => {
+    res.sendFile('./admin/upload.html');
+  }
+);
 
 app.post('/upload', upload.single('file'), (req, res) => {
   console.log(req.body);
