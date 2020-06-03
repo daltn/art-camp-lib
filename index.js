@@ -1,3 +1,4 @@
+const serverless = require('serverless-http');
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
@@ -63,13 +64,13 @@ function getUnauthorizedResponse(req) {
   return req.auth ? 'Nope' : 'No credentials provided';
 }
 
-app.use(
-  basicAuth({
-    users: { admin: cred.password },
-    unauthorizedResponse: getUnauthorizedResponse,
-    challenge: true,
-  })
-);
+// app.use(
+//   basicAuth({
+//     users: { admin: cred.password },
+//     unauthorizedResponse: getUnauthorizedResponse,
+//     challenge: true,
+//   })
+// );
 
 app.get('/upload', (req, res) => {
   res.sendFile('./admin/upload.html');

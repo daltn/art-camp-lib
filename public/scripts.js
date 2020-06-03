@@ -11,7 +11,10 @@ async function getRandom(img) {
     let node = document.getElementById(img);
     let id = fileCheck(filename);
     node.src = `https://art-camp-library.s3.amazonaws.com/${id}`;
+    infoBlock.style.opacity = 0;
     infoBlock.innerHTML = `${artist}, ${title}, ${year}`;
+    infoBlock.style.opacity = 1;
+    console.log(infoBlock);
   } catch (e) {
     console.error(e);
   }
@@ -92,3 +95,17 @@ function drag(e) {
 function setTranslate(xPos, yPos, el) {
   el.style.transform = 'translate3d(' + xPos + 'px, ' + yPos + 'px, 0)';
 }
+
+let info = document.querySelector('.info');
+let modal = document.querySelector('.modal');
+
+info.onclick = function () {
+  modal.style.display = 'block';
+  console.log('yuuuuru');
+};
+
+// window.onclick = function (e) {
+//   if (e.target == modal) {
+//     modal.style.display = 'none';
+//   }
+// };
