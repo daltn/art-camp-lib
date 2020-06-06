@@ -14,7 +14,6 @@ let sequelize = new Sequelize("sqlite:./db/catalog.db", {
 });
 
 app.use(helmet());
-app.use(compression());
 app.use(express.static("public"));
 
 AWS.config.update({
