@@ -7,7 +7,6 @@ const cred = require("./cred.js");
 const app = express();
 let Sequelize = require("sequelize");
 const basicAuth = require("express-basic-auth");
-const compression = require("compression");
 const helmet = require("helmet");
 
 let sequelize = new Sequelize("sqlite:./db/catalog.db", {
