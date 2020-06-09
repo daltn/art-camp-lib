@@ -39,7 +39,7 @@ h1 {
 img {
   object-fit: cover;
   width: 100%;
-  min-height: 100vh;
+  height: 100vh;
 }
 img:hover {
   cursor: pointer;
