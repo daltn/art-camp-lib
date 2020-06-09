@@ -15,7 +15,7 @@ async function getRandom(img) {
     node.src = `https://art-camp-library.s3.amazonaws.com/${id}`;
     infoBlock.style.opacity = 0;
     infoBlock.innerHTML = `${artist}, ${title}, ${year}`;
-    console.log(infoBlock);
+    infoBlock.style.opacity = 1;
   } catch (e) {
     console.error(e);
   }
