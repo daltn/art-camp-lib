@@ -6,7 +6,9 @@ async function getRandom(img) {
     infoBlock = document.querySelector(`.two-info`);
   }
   try {
-    let response = await fetch(`http://localhost:3000/get`);
+    let response = await fetch(
+      `http://ec2-100-26-18-204.compute-1.amazonaws.com/get`
+    );
     let { filename, artist, title, year } = await response.json();
     let node = document.getElementById(img);
     let id = fileCheck(filename);
