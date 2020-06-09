@@ -22,8 +22,8 @@ h1 {
   filter: drop-shadow(1px 1px 1px #717171);
   margin: 0 auto;
   letter-spacing: 1px;
-  transition: opacity 900ms ease-in;
-  opacity: 0;
+  transition: opacity 500ms ease-in;
+  opacity: 1;
 }
 .flex {
   display: flex;
@@ -43,9 +43,6 @@ img {
 }
 img:hover {
   cursor: pointer;
-}
-img:hover + h1 {
-  opacity: 1;
 }
 .info {
   position: absolute;
