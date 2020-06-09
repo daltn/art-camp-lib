@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'Cutive';
-  src: url('public/fonts/CutiveMono-Regular.ttf') format('truetype');
+  src: url('./fonts/CutiveMono-Regular.ttf') format('truetype');
 }
 html {
   width: 100%;
