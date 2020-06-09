@@ -118,6 +118,9 @@ async function uploadFile(source, targetName, res) {
   // return res.send('<h1>Nice!!</h1>');
 }
 
-app.listen(3000, () =>
-  console.log('Listening on port 3000 -> http://localhost:3000')
+const port = '8080';
+const ip = '100.26.18.204';
+
+app.listen(port, ip, () =>
+  console.log(`Running on http://${hostname}:${port}/`)
 );
