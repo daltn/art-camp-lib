@@ -43,9 +43,8 @@ img {
 }
 img:hover {
   cursor: pointer;
-  border: 1px solid cyan;
 }
-img:hover > h1 {
+img:hover + h1 {
   opacity: 1;
 }
 .info {
