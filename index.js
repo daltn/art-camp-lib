@@ -1,39 +1,39 @@
-const express = require("express");
-const multer = require("multer");
-const path = require("path");
-const AWS = require("aws-sdk");
-const fs = require("fs");
-const cred = require("./cred.js");
+const express = require('express');
+const multer = require('multer');
+const path = require('path');
+const AWS = require('aws-sdk');
+const fs = require('fs');
+const cred = require('./cred.js');
 const app = express();
-let Sequelize = require("sequelize");
-const basicAuth = require("express-basic-auth");
-const helmet = require("helmet");
+let Sequelize = require('sequelize');
+const basicAuth = require('express-basic-auth');
+const helmet = require('helmet');
 
-let sequelize = new Sequelize("sqlite:./db/catalog.db", {
+let sequelize = new Sequelize('sqlite:./db/catalog.db', {
   logging: false,
 });
 
 app.use(helmet());
-app.use(express.static("public"));
+app.use(express.static('public'));
 
 AWS.config.update({
   accessKeyId: cred.access_id,
   secretAccessKey: cred.secret,
-  region: "us-east-1",
+  region: 'us-east-1',
 });
 
 const s3 = new AWS.S3();
-const BUCKET = "art-camp-library";
+const BUCKET = 'art-camp-library';
 
 const storage = multer.diskStorage({
-  destination: "uploads/",
+  destination: 'uploads/',
   filename: function (req, file, cb) {
     cb(null, file.originalname);
   },
 });
 const upload = multer({ storage: storage });
 
-const Catalog = sequelize.define("catalog", {
+const Catalog = sequelize.define('catalog', {
   filename: {
     type: Sequelize.STRING,
     allowNull: false,
@@ -54,30 +54,30 @@ const Catalog = sequelize.define("catalog", {
 
 sequelize.sync();
 
-app.get("/get", (req, res) => {
+app.get('/get', (req, res) => {
   Catalog.findOne({
-    attributes: ["id", "filename", "artist", "title", "year"],
+    attributes: ['id', 'filename', 'artist', 'title', 'year'],
     order: sequelize.random(),
   }).then((art) => res.send(JSON.stringify(art)));
 });
 
 function getUnauthorizedResponse(req) {
-  return req.auth ? "Nope" : "No credentials provided";
+  return req.auth ? 'Nope' : 'No credentials provided';
 }
 
 app.get(
-  "/upload",
+  '/upload',
   basicAuth({
     users: { admin: cred.password },
     unauthorizedResponse: getUnauthorizedResponse,
     challenge: true,
   }),
   (req, res) => {
-    res.sendFile("./admin/upload.html");
+    res.sendFile('./admin/upload.html');
   }
 );
 
-app.post("/upload", upload.single("file"), (req, res) => {
+app.post('/upload', upload.single('file'), (req, res) => {
   console.log(req.body);
   uploadFile(req.file.path, req.file.filename, res);
   Catalog.create({
@@ -86,19 +86,19 @@ app.post("/upload", upload.single("file"), (req, res) => {
     title: req.body.title,
     year: req.body.year,
   });
-  res.send("<h1>Yuuuur!!</h1>");
+  res.send('<h1>Yuuuur!!</h1>');
 });
 
 async function uploadFile(source, targetName, res) {
-  console.log("source:", source, "target:", targetName);
+  console.log('source:', source, 'target:', targetName);
 
-  let fileStream = fs.createReadStream("./uploads/" + targetName);
+  let fileStream = fs.createReadStream('./uploads/' + targetName);
 
   let params = {
     Bucket: BUCKET,
     Key: targetName,
     Body: fileStream,
-    ACL: "public-read",
+    ACL: 'public-read',
   };
 
   let storage = await s3
@@ -112,17 +112,11 @@ async function uploadFile(source, targetName, res) {
 
   fs.unlink(source, (err) => console.log(err));
 
-  console.log("Sweet!!!");
+  console.log('Sweet!!!');
   // return res.send('<h1>Nice!!</h1>');
 }
 
-<<<<<<< HEAD
 const port = '8080';
 const ip = '100.26.18.204';
 
-app.listen(port, ip, () =>
-  console.log(`Running on http://${hostname}:${port}/`)
-);
-=======
-app.listen(8080, cred.ip);
->>>>>>> 16f196fb2635280ff0986f0e1156c17070aa1b22
+app.listen(port, ip, () => console.log(`Running on http://${ip}:${port}/`));
