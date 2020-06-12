@@ -7,15 +7,16 @@ async function getRandom(img) {
   }
   try {
     let response = await fetch(
-      `http://ec2-100-26-18-204.compute-1.amazonaws.com/get`
+      // `http://ec2-100-26-18-204.compute-1.amazonaws.com/get`
+      `http://localhost:8080/get`
     );
     let { filename, artist, title, year } = await response.json();
     let node = document.getElementById(img);
     let id = fileCheck(filename);
     node.src = `https://art-camp-library.s3.amazonaws.com/${id}`;
-    infoBlock.style.opacity = 0;
-    infoBlock.innerHTML = `${artist}, ${title}, ${year}`;
-    infoBlock.style.opacity = 1;
+    setTimeout(() => {
+      infoBlock.innerHTML = `${artist}, ${title}, ${year}`;
+    }, 100);
   } catch (e) {
     console.error(e);
   }
@@ -97,16 +98,13 @@ function setTranslate(xPos, yPos, el) {
   el.style.transform = 'translate3d(' + xPos + 'px, ' + yPos + 'px, 0)';
 }
 
-let info = document.querySelector('.info');
-let modal = document.querySelector('.modal');
+const info = document.querySelector('.info');
+const modal = document.querySelector('.modal');
 
-info.onclick = function () {
+info.ondblclick = function () {
   modal.style.display = 'block';
-  console.log('yuuuuru');
 };
 
-// window.onclick = function (e) {
-//   if (e.target == modal) {
-//     modal.style.display = 'none';
-//   }
-// };
+modal.onclick = function () {
+  modal.style.display = 'none';
+};
