@@ -7,8 +7,8 @@ async function getRandom(img) {
   }
   try {
     let response = await fetch(
-      // `http://ec2-100-26-18-204.compute-1.amazonaws.com/get`
-      `http://localhost:8080/get`
+      `http://ec2-100-26-18-204.compute-1.amazonaws.com/get`
+      // `http://localhost:8080/get`
     );
     let { filename, artist, title, year } = await response.json();
     let node = document.getElementById(img);
