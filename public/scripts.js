@@ -2,8 +2,10 @@ async function getRandom(img) {
   let infoBlock;
   if (img === 'one') {
     infoBlock = document.querySelector(`.one-info`);
+    infoBlock.opacity = 0;
   } else {
     infoBlock = document.querySelector(`.two-info`);
+    infoBlock.opacity = 0;
   }
   try {
     let response = await fetch(
@@ -13,10 +15,13 @@ async function getRandom(img) {
     let { filename, artist, title, year } = await response.json();
     let node = document.getElementById(img);
     let id = fileCheck(filename);
+    node.onload = () => {
+      setTimeout(() => {
+        infoBlock.innerHTML = `${artist}, ${title}, ${year}`;
+        infoBlock.opacity = 1;
+      }, 300);
+    };
     node.src = `https://art-camp-library.s3.amazonaws.com/${id}`;
-    setTimeout(() => {
-      infoBlock.innerHTML = `${artist}, ${title}, ${year}`;
-    }, 100);
   } catch (e) {
     console.error(e);
   }
