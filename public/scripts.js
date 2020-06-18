@@ -40,76 +40,78 @@ function fileCheck(file) {
   }
 }
 
-let dragItem = document.querySelector('.info');
-let container = document.querySelector('body');
-
-let active = false;
-let currentX;
-let currentY;
-let initialX;
-let initialY;
-let xOffset = 0;
-let yOffset = 0;
-
-container.addEventListener('touchstart', dragStart, false);
-container.addEventListener('touchend', dragEnd, false);
-container.addEventListener('touchmove', drag, false);
-
-container.addEventListener('mousedown', dragStart, false);
-container.addEventListener('mouseup', dragEnd, false);
-container.addEventListener('mousemove', drag, false);
-
-function dragStart(e) {
-  if (e.type === 'touchstart') {
-    initialX = e.touches[0].clientX - xOffset;
-    initialY = e.touches[0].clientY - yOffset;
-  } else {
-    initialX = e.clientX - xOffset;
-    initialY = e.clientY - yOffset;
-  }
-
-  if (e.target === dragItem) {
-    active = true;
-  }
-}
-
-function dragEnd(e) {
-  initialX = currentX;
-  initialY = currentY;
-
-  active = false;
-}
-
-function drag(e) {
-  if (active) {
-    e.preventDefault();
-
-    if (e.type === 'touchmove') {
-      currentX = e.touches[0].clientX - initialX;
-      currentY = e.touches[0].clientY - initialY;
-    } else {
-      currentX = e.clientX - initialX;
-      currentY = e.clientY - initialY;
-    }
-
-    xOffset = currentX;
-    yOffset = currentY;
-
-    setTranslate(currentX, currentY, dragItem);
-  }
-}
-
-function setTranslate(xPos, yPos, el) {
-  el.style.transform = 'translate3d(' + xPos + 'px, ' + yPos + 'px, 0)';
-}
-
 const info = document.querySelector('.info');
 const modal = document.querySelector('.modal');
 
-info.ondblclick = function () {
+info.onclick = function () {
   modal.style.display = 'block';
 };
 
 modal.onclick = function () {
   modal.style.display = 'none';
 };
+
+let imgOneOff = true;
+let imgTwoOff = true;
+
+function showMobileInfo(imgId) {
+  let image = document.querySelector(`#${imgId}`);
+  if (imgOneOff && imgTwoOff) {
+    image.style.opacity = 0;
+    if (imgId === 'one') {
+      imgOneOff = !imgOneOff;
+    } else {
+      imgTwoOff = !imgTwoOff;
+    }
+  } else if (!imgOneOff) {
+    imgOneOff = true;
+    image.style.opacity = 1;
+  } else {
+    imgTwoOff = !imgTwoOff;
+    image.style.opacity = 1;
+  }
+}
+
+document.addEventListener('touchstart', handleTouchStart, false);
+document.addEventListener('touchmove', handleTouchMove, false);
+
+let xDown = null;
+let yDown = null;
+
+function getTouches(evt) {
+  return evt.touches; // browser API
+}
+
+function handleTouchStart(evt) {
+  const firstTouch = getTouches(evt)[0];
+  xDown = firstTouch.clientX;
+  yDown = firstTouch.clientY;
+}
+
+function handleTouchMove(evt) {
+  if (!xDown || !yDown) {
+    return;
+  }
+
+  let xUp = evt.touches[0].clientX;
+  let yUp = evt.touches[0].clientY;
+
+  let xDiff = xDown - xUp;
+  let yDiff = yDown - yUp;
+
+  if (Math.abs(xDiff) > Math.abs(yDiff)) {
+    if (xDiff > 0) {
+      alert('left swipe');
+    } else {
+      alert('right swipe');
+    }
+  } else {
+    if (yDiff > 0) {
+      /* up swipe */
+    } else {
+      /* down swipe */
+    }
+  }
+  xDown = null;
+  yDown = null;
+}
