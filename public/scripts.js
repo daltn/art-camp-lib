@@ -72,46 +72,46 @@ function showMobileInfo(imgId) {
   }
 }
 
-document.addEventListener('touchstart', handleTouchStart, false);
-document.addEventListener('touchmove', handleTouchMove, false);
+// document.addEventListener('touchstart', handleTouchStart, false);
+// document.addEventListener('touchmove', handleTouchMove, false);
 
-let xDown = null;
-let yDown = null;
+// let xDown = null;
+// let yDown = null;
 
-function getTouches(evt) {
-  return evt.touches; // browser API
-}
+// function getTouches(evt) {
+//   return evt.touches; // browser API
+// }
 
-function handleTouchStart(evt) {
-  const firstTouch = getTouches(evt)[0];
-  xDown = firstTouch.clientX;
-  yDown = firstTouch.clientY;
-}
+// function handleTouchStart(evt) {
+//   const firstTouch = getTouches(evt)[0];
+//   xDown = firstTouch.clientX;
+//   yDown = firstTouch.clientY;
+// }
 
-function handleTouchMove(evt) {
-  if (!xDown || !yDown) {
-    return;
-  }
+// function handleTouchMove(evt) {
+//   if (!xDown || !yDown) {
+//     return;
+//   }
 
-  let xUp = evt.touches[0].clientX;
-  let yUp = evt.touches[0].clientY;
+//   let xUp = evt.touches[0].clientX;
+//   let yUp = evt.touches[0].clientY;
 
-  let xDiff = xDown - xUp;
-  let yDiff = yDown - yUp;
+//   let xDiff = xDown - xUp;
+//   let yDiff = yDown - yUp;
 
-  if (Math.abs(xDiff) > Math.abs(yDiff)) {
-    if (xDiff > 0) {
-      alert('left swipe');
-    } else {
-      alert('right swipe');
-    }
-  } else {
-    if (yDiff > 0) {
-      /* up swipe */
-    } else {
-      /* down swipe */
-    }
-  }
-  xDown = null;
-  yDown = null;
-}
+//   if (Math.abs(xDiff) > Math.abs(yDiff)) {
+//     if (xDiff > 0) {
+//       alert('left swipe');
+//     } else {
+//       alert('right swipe');
+//     }
+//   } else {
+//     if (yDiff > 0) {
+//       /* up swipe */
+//     } else {
+//       /* down swipe */
+//     }
+//   }
+//   xDown = null;
+//   yDown = null;
+// }
