@@ -93,6 +93,7 @@ h2 {
   }
   body {
     max-height: stretch;
+    overflow: auto;
   }
   .flex section {
     width: 100%;
