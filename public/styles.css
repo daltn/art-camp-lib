@@ -92,7 +92,7 @@ h2 {
     flex-direction: column;
   }
   body {
-    max-height: stretch;
+    height: stretch;
     overflow: auto;
   }
   .flex section {
