@@ -61,8 +61,8 @@ modal.onclick = function () {
   modal.style.display = 'none';
 };
 
-const imgOne = document.querySelector('.sec-one')
-const imgTwo = document.querySelector('.sec-two')
+const imgOne = document.querySelector('#one')
+const imgTwo = document.querySelector('#two')
 
 function toggleMobileInfo(key) {
   key === 'one' ?
