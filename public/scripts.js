@@ -76,7 +76,3 @@ const hammerTwo = new Hammer(imgTwo)
 hammerOne.on('swipe', () => toggleMobileInfo('one'))
 hammerTwo.on('swipe', () => toggleMobileInfo('two'))
 
-
-if (navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i)) {
-  document.querySelectorAll('section').classList.add('ios')
-}
