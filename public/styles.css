@@ -48,7 +48,7 @@ img {
 }
 .info {
   position: absolute;
-  top: 2rem;
+  top: 1rem;
   left: 2rem;
   width: 30px;
   height: auto;
@@ -65,7 +65,7 @@ img {
   background-color: transparent;
   color: #fff;
   padding: 2rem;
-  backdrop-filter: blur(150px);
+  background-color: rgba(80, 80, 80, 0.9);
 }
 
 p {

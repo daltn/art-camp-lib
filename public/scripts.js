@@ -27,9 +27,23 @@ async function getRandom(img) {
   }
 }
 
+let viewportWidth
+
+function setViewport() {
+  viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+}
+
+setViewport()
+
+window.addEventListener('resize', setViewport)
+
 async function init() {
   getRandom('one');
   getRandom('two');
+
+  if(viewportWidth < 600){
+    window.scrollTo(0, 100);
+  }
 }
 
 function fileCheck(file) {
@@ -51,16 +65,6 @@ modal.onclick = function () {
   modal.style.display = 'none';
 };
 
-let viewportWidth
-
-function setViewport() {
-  viewportWidth = window.innerWidth || document.documentElement.clientWidth;
-}
-
-setViewport()
-
-window.addEventListener('resize', setViewport)
-
 const imgOne = document.querySelector('#one')
 const imgTwo = document.querySelector('#two')
 
@@ -68,8 +72,6 @@ function toggleMobileInfo(key) {
   key === 'one' ?
   imgOne.classList.toggle('blur') :
   imgTwo.classList.toggle('blur')
-
-  console.log('yuuuur')
 }
 
 const hammerOne = new Hammer(imgOne)
@@ -77,3 +79,5 @@ const hammerTwo = new Hammer(imgTwo)
 
 hammerOne.on('swipe', () => toggleMobileInfo('one'))
 hammerTwo.on('swipe', () => toggleMobileInfo('two'))
+
+
