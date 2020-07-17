@@ -12,19 +12,22 @@ body {
   margin: 0;
   font-family: 'Cutive', 'Courier New', Courier, monospace;
   overflow: hidden;
+  cursor: pointer;
 }
 h1 {
   font-size: 1.1rem;
-  position: relative;
-  bottom: 100px;
+  position: absolute;
+  left: 9vw;
+  top: 78vh;
   color: #fff;
   width: 60%;
-  filter: drop-shadow(1px 1px 1px #717171);
   margin: 0 auto;
   letter-spacing: 1px;
   display: block;
   opacity: 0;
   transition: opacity 400ms ease;
+  padding: 1rem;
+  background-color: rgba(80, 80, 80, 0.7);
 }
 .flex {
   display: flex;
@@ -32,16 +35,16 @@ h1 {
   overflow: hidden;
 }
 .flex section {
+  position: relative;
   width: 50%;
   height: 50%;
-}
-.flex section:hover h1 {
-  opacity: 1;
 }
 img {
   object-fit: cover;
   width: 100%;
-  height: 100vh;
+  height: 101vh;
+  -webkit-user-drag: none;
+  backface-visibility: hidden;
 }
 .info {
   position: absolute;
@@ -59,17 +62,26 @@ img {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: #fff;
-  color: #000;
+  background-color: transparent;
+  color: #fff;
   padding: 2rem;
+  backdrop-filter: blur(150px);
 }
 
 p {
   width: 40%;
+  filter: drop-shadow(1px 1px 1px #717171);
 }
 
 h2 {
   font-size: 1.5rem;
+  filter: drop-shadow(1px 1px 1px #717171);
+}
+
+.one-info:hover,
+.two-info:hover {
+  opacity: 1;
+  cursor: help;
 }
 
 @media only screen and (max-width: 600px) {
@@ -79,23 +91,52 @@ h2 {
     overflow: hidden;
     flex-direction: column;
   }
+  body {
+    max-height: stretch;
+  }
   .flex section {
     width: 100%;
-    height: 50vh;
+    height: 52vh;
   }
-  .flex section:hover h1 {
-    display: block;
-  }
+
   img {
     object-fit: cover;
     width: 100%;
-    height: 50vh;
+    height: 52vh;
   }
+
+  .one-info:hover,
+  .two-info:hover {
+    opacity: 0;
+  }
+
+  h1 {
+    top: 40%;
+    left: 15%;
+    opacity: 0;
+    z-index: -1;
+  }
+
+  #one.blur,
+  #two.blur {
+    opacity: 0.2
+  }
+
+  #one.blur + .one-info {
+    opacity: 1;
+    z-index: 1;
+  }
+
+  #two.blur + .two-info {
+    opacity: 1;
+    z-index: 1;
+  }
+
   p {
     width: 80%;
   }
-  h1 {
-    bottom: 45%;
-    color: #000;
+
+  .modal > p:last-child {
+    padding-bottom: 4rem;
   }
 }

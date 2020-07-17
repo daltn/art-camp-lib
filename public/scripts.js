@@ -51,67 +51,29 @@ modal.onclick = function () {
   modal.style.display = 'none';
 };
 
-let imgOneOff = true;
-let imgTwoOff = true;
+let viewportWidth
 
-function showMobileInfo(imgId) {
-  let image = document.querySelector(`#${imgId}`);
-  if (imgOneOff && imgTwoOff) {
-    image.style.opacity = 0;
-    if (imgId === 'one') {
-      imgOneOff = !imgOneOff;
-    } else {
-      imgTwoOff = !imgTwoOff;
-    }
-  } else if (!imgOneOff) {
-    imgOneOff = true;
-    image.style.opacity = 1;
-  } else {
-    imgTwoOff = !imgTwoOff;
-    image.style.opacity = 1;
-  }
+function setViewport() {
+  viewportWidth = window.innerWidth || document.documentElement.clientWidth;
 }
 
-// document.addEventListener('touchstart', handleTouchStart, false);
-// document.addEventListener('touchmove', handleTouchMove, false);
+setViewport()
 
-// let xDown = null;
-// let yDown = null;
+window.addEventListener('resize', setViewport)
 
-// function getTouches(evt) {
-//   return evt.touches; // browser API
-// }
+const imgOne = document.querySelector('#one')
+const imgTwo = document.querySelector('#two')
 
-// function handleTouchStart(evt) {
-//   const firstTouch = getTouches(evt)[0];
-//   xDown = firstTouch.clientX;
-//   yDown = firstTouch.clientY;
-// }
+function toggleMobileInfo(key) {
+  key === 'one' ?
+  imgOne.classList.toggle('blur') :
+  imgTwo.classList.toggle('blur')
 
-// function handleTouchMove(evt) {
-//   if (!xDown || !yDown) {
-//     return;
-//   }
+  console.log('yuuuur')
+}
 
-//   let xUp = evt.touches[0].clientX;
-//   let yUp = evt.touches[0].clientY;
+const hammerOne = new Hammer(imgOne)
+const hammerTwo = new Hammer(imgTwo)
 
-//   let xDiff = xDown - xUp;
-//   let yDiff = yDown - yUp;
-
-//   if (Math.abs(xDiff) > Math.abs(yDiff)) {
-//     if (xDiff > 0) {
-//       alert('left swipe');
-//     } else {
-//       alert('right swipe');
-//     }
-//   } else {
-//     if (yDiff > 0) {
-//       /* up swipe */
-//     } else {
-//       /* down swipe */
-//     }
-//   }
-//   xDown = null;
-//   yDown = null;
-// }
+hammerOne.on('swipe', () => toggleMobileInfo('one'))
+hammerTwo.on('swipe', () => toggleMobileInfo('two'))
