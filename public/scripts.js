@@ -61,8 +61,8 @@ modal.onclick = function () {
   modal.style.display = 'none';
 };
 
-const imgOne = document.querySelector('#one')
-const imgTwo = document.querySelector('#two')
+const imgOne = document.querySelector('.sec-one')
+const imgTwo = document.querySelector('.sec-two')
 
 function toggleMobileInfo(key) {
   key === 'one' ?
@@ -78,9 +78,5 @@ hammerTwo.on('swipe', () => toggleMobileInfo('two'))
 
 
 if (navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i)) {
-  window.addEventListener("load",function() {
-      setTimeout(function() {
-          window.scrollTo(0, 10);
-      }, 500);
-  });
+  document.querySelectorAll('section').classList.add('ios')
 }
