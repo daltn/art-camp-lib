@@ -41,8 +41,12 @@ async function init() {
   getRandom('one');
   getRandom('two');
 
-  if(viewportWidth < 600){
-    window.scrollTo(0, 100);
+  if (navigator.userAgent.match(/iPhone/i) || navigator.userAgent.match(/iPad/i)) {
+    window.addEventListener("load",function() {
+        setTimeout(function() {
+            window.scrollTo(0, 1);
+        }, 1000);
+    });
   }
 }
 
