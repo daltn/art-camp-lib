@@ -2,22 +2,25 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title></title>
+    <title>Admin Panel</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="">
+    <link rel="stylesheet" href="admin-styles.css">
   </head>
   <body>
-    <form action="/upload" method="post" enctype="multipart/form-data">
-      <input type="file" name="file" />
-      <label for="name">Artist:</label>
-      <input type="text" id="name" name="artist" required>
-      <label for="title">Title:</label>
-      <input type="text" id="title" name="title" required>
-      <label for="year">Year:</label>
-      <input type="text" id="year" name="year" required>
-      <input type="submit" value="Upload">
-    </form>
+    <section>
+      <h1>Upload New Catalog Item</h1>
+      <form action="/upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" />
+        <label for="name">Artist:</label>
+        <input type="text" id="name" name="artist" required>
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required>
+        <label for="year">Year:</label>
+        <input type="text" id="year" name="year" required>
+        <input type="submit" value="Upload">
+      </form>
+    </section>
     <script src="" async defer></script>
   </body>
 </html>
