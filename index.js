@@ -50,6 +50,8 @@ const Catalog = sequelize.define('catalog', {
     type: Sequelize.INTEGER,
     allowNull: false,
   },
+}, {
+  timestamps: false
 });
 
 sequelize.sync();
@@ -65,17 +67,41 @@ function getUnauthorizedResponse(req) {
   return req.auth ? 'Nope' : 'No credentials provided';
 }
 
+async function getCatalog() {
+    try {
+    let catalogList = await Catalog.findAll()
+    return catalogList
+    } catch(e){
+      console.error(e)
+    }
+  }
+
 app.get(
   '/upload',
   basicAuth({
     users: { admin: cred.password },
     unauthorizedResponse: getUnauthorizedResponse,
     challenge: true,
-  }),
-  (req, res) => {
-    res.sendFile(path.join(__dirname, '/admin/', 'upload.html'));;
+  }), (req, res) => {
+    res.sendFile(path.join(__dirname, '/admin/', 'upload.html'));
   }
 );
+app.get(
+  '/allitems',
+  basicAuth({
+    users: { admin: cred.password },
+    unauthorizedResponse: getUnauthorizedResponse,
+    challenge: true,
+  }), (req, res) => {
+    res.sendFile(path.join(__dirname, '/admin/', 'allitems.html'));
+  }
+);
+
+app.get('/all', async (req, res) => {
+  const catalogList = await getCatalog()
+  return res.status(200).json(catalogList)
+})
+
 
 app.post('/upload', upload.single('file'), (req, res) => {
   console.log(req.body);
@@ -88,6 +114,12 @@ app.post('/upload', upload.single('file'), (req, res) => {
   });
   res.send('<h1>Yuuuur!!</h1>');
 });
+
+app.post('/delete', (req, res) => {
+  console.log(req.body, req.body.catalog-id);
+})
+
+
 
 async function uploadFile(source, targetName, res) {
   console.log('source:', source, 'target:', targetName);

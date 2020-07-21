@@ -27,6 +27,29 @@ async function getRandom(img) {
   }
 }
 
+async function getCatalog() {
+  try {
+    let response = await fetch(
+      `http://artcamplibrary.com/all`
+      // `http://localhost:8080/all`
+    );
+    const catalog = await response.json();
+    let node = document.querySelector('.init');
+    catalog.forEach(item => {
+      const row = document.createElement('tr')
+      console.log(item)
+      for (const data in item) {
+        const cell = document.createElement('td')
+        cell.innerHTML = item[data]
+        row.appendChild(cell)
+      }
+      node.after(row)
+    })
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 let viewportWidth
 
 function setViewport() {

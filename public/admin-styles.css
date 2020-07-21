@@ -2,16 +2,27 @@
   font-family: 'Cutive', 'Courier New', Courier, monospace;
 }
 
+body {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
 
 section {
   font-size: 1rem;
   padding: 1rem;
+  border: 1px solid cyan;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 form {
   display: flex;
   flex-direction: column;
   max-width: 400px;
+
 }
 
 input {
@@ -23,8 +34,19 @@ input[type=submit] {
   font-size: 2rem;
   text-transform: uppercase;
   letter-spacing: 2px;
+  background: salmon;
+  width: 400px;
 }
 
 label {
   margin: 0;
+}
+
+input[type=submit].delete {
+  background: yellow;
+}
+
+td {
+  padding: 1rem;
+  text-align: center;
 }
