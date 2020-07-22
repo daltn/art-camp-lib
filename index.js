@@ -8,6 +8,7 @@ const app = express();
 let Sequelize = require('sequelize');
 const basicAuth = require('express-basic-auth');
 const helmet = require('helmet');
+let bodyParser = require('body-parser')
 
 let sequelize = new Sequelize('sqlite:./db/catalog.db', {
   logging: false,
@@ -15,6 +16,7 @@ let sequelize = new Sequelize('sqlite:./db/catalog.db', {
 
 app.use(helmet());
 app.use(express.static('public'));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 AWS.config.update({
   accessKeyId: cred.access_id,
@@ -86,6 +88,7 @@ app.get(
     res.sendFile(path.join(__dirname, '/admin/', 'upload.html'));
   }
 );
+
 app.get(
   '/allitems',
   basicAuth({
@@ -115,9 +118,21 @@ app.post('/upload', upload.single('file'), (req, res) => {
   res.send('<h1>Yuuuur!!</h1>');
 });
 
-app.post('/delete', (req, res) => {
-  console.log(req.body, req.body.catalog-id);
+app.get('/delete', basicAuth({
+    users: { admin: cred.password },
+    unauthorizedResponse: getUnauthorizedResponse,
+    challenge: true,
+  }), (req, res) => {
+  deleteRow(req.query.id);
+  res.send('<h1>Yuuuur tho byyyye data!!</h1>');
 })
+
+
+async function deleteRow(id) {
+  let n = await Catalog.destroy({ where: { id } });
+  console.log(`number of deleted rows: ${n}`);
+  sequelize.close();
+}
 
 
 
@@ -145,7 +160,7 @@ async function uploadFile(source, targetName, res) {
   fs.unlink(source, (err) => console.log(err));
 
   console.log('Sweet!!!');
-  // return res.send('<h1>Nice!!</h1>');
+  return res.send('<h1>Nice!!</h1>');
 }
 
 const port = '8080';

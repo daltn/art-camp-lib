@@ -24,9 +24,9 @@
     </section>
     <section>
       <h1>Delete Catalog Item</h1>
-      <form action="/delete" method="post" enctype="multipart/form-data">
-        <label for="catalog id">Catalog ID:</label>
-        <input type="text" id="catalog-id" name="catalog-id" required>
+      <form action="/delete" method="GET">
+        <label for="id">Catalog ID:</label>
+        <input type="text" id="id" name="id" required>
         <input class="delete" type="submit" value="Delete">
       </form>
     </section>
