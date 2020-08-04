@@ -36,6 +36,12 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 const Catalog = sequelize.define('catalog', {
+  id: {
+    type: Sequelize.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+    allowNull: false,
+  },
   filename: {
     type: Sequelize.STRING,
     allowNull: false,
@@ -102,7 +108,7 @@ app.get(
 
 app.get('/all', async (req, res) => {
   const catalogList = await getCatalog()
-  return res.status(200).json(catalogList)
+  return res.json(catalogList)
 })
 
 
@@ -125,6 +131,25 @@ app.get('/delete', basicAuth({
   }), (req, res) => {
   deleteRow(req.query.id);
   res.send('<h1>Yuuuur tho byyyye data!!</h1>');
+})
+
+app.post('/update', upload.none(), basicAuth({
+    users: { admin: cred.password },
+    unauthorizedResponse: getUnauthorizedResponse,
+    challenge: true,
+  }), async (req, res) => {
+      const {id, filename, artist, title, year } = req.body;
+
+      try {
+        const result = await Catalog.update(
+          { filename, title, artist, title, year},
+          { where: { _id: id } }
+        )
+        console.log(result)
+      } catch (e) {
+        console.error(e)
+      }
+      res.send('<h1>Updated!!</h1>');
 })
 
 
