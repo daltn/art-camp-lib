@@ -6,6 +6,7 @@ const fs = require('fs');
 const cred = require('./cred.js');
 const app = express();
 let Sequelize = require('sequelize');
+const Op = Sequelize.Op
 const basicAuth = require('express-basic-auth');
 const helmet = require('helmet');
 let bodyParser = require('body-parser')
@@ -76,16 +77,16 @@ function getUnauthorizedResponse(req) {
 }
 
 async function getCatalog() {
-    try {
+  try {
     let catalogList = await Catalog.findAll()
     return catalogList
-    } catch(e){
+  } catch(e){
       console.error(e)
-    }
   }
+}
 
 app.get(
-  '/upload',
+  '/admin',
   basicAuth({
     users: { admin: cred.password },
     unauthorizedResponse: getUnauthorizedResponse,
@@ -111,16 +112,22 @@ app.get('/all', async (req, res) => {
   return res.json(catalogList)
 })
 
-
-app.post('/upload', upload.single('file'), (req, res) => {
+app.post('/upload', upload.single('file'), async (req, res) => {
   console.log(req.body);
   uploadFile(req.file.path, req.file.filename, res);
+
+  const catalogList = await getCatalog()
+  let max = catalogList.length + 1;
+  console.log('max', max)
+
   Catalog.create({
+    id: max,
     filename: req.file.filename,
     artist: req.body.artist,
     title: req.body.title,
     year: req.body.year,
   });
+
   res.send('<h1>Yuuuur!!</h1>');
 });
 
@@ -130,7 +137,7 @@ app.get('/delete', basicAuth({
     challenge: true,
   }), (req, res) => {
   deleteRow(req.query.id);
-  res.send('<h1>Yuuuur tho byyyye data!!</h1>');
+  res.send('<h1>Byyyye data!!</h1>');
 })
 
 app.post('/update', upload.none(), basicAuth({
@@ -149,7 +156,7 @@ app.post('/update', upload.none(), basicAuth({
       } catch (e) {
         console.error(e)
       }
-      res.send('<h1>Updated!!</h1>');
+      res.send('<h1>Updated :)</h1>');
 })
 
 
@@ -185,7 +192,6 @@ async function uploadFile(source, targetName, res) {
   fs.unlink(source, (err) => console.log(err));
 
   console.log('Sweet!!!');
-  return res.send('<h1>Nice!!</h1>');
 }
 
 const port = '8080';
