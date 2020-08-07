@@ -30,6 +30,7 @@ async function getCatalog() {
   try {
     let response = await fetch(
       `http://artcamplibrary.com/all`
+      // `http://localhost:8080/all`
     );
     const catalog = await response.json();
     let node = document.querySelector('.init');

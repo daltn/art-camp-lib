@@ -111,8 +111,8 @@ app.get('/all', async (req, res) => {
 })
 
 app.post('/upload', upload.single('file'), async (req, res) => {
-  console.log(req.body);
-  uploadFile(req.file.path, req.file.filename, res);
+
+  await uploadFile(req.file.path, req.file.filename, res);
 
   const catalogList = await getCatalog()
 
@@ -147,7 +147,7 @@ app.post('/update', upload.none(), basicAuth({
       const { filename, artist, title, year } = req.body;
       console.log(req.body)
       try {
-        const result = await Catalog.update(
+        await Catalog.update(
           { filename, title, artist, year},
           { where: { filename } }
         )
@@ -192,12 +192,16 @@ async function uploadFile(source, targetName, res) {
 
   let upload = await s3.upload(params, (err, data) => {
       if (err) console.log(err, err.stack);
-    }).promise()
+    }).promise().then( res => {
+      console.log(res)
+      fs.unlink(source, (err) => console.log(err));
+    })
 
-  fs.unlink(source, (err) => console.log(err));
+
 }
 
 const port = '8080';
 const ip = '172.31.63.2';
+// const ip= 'localhost'
 
 app.listen(port, ip, () => console.log(`Running on http://${ip}:${port}/`));
