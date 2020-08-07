@@ -135,7 +135,6 @@ app.get('/delete', basicAuth({
     unauthorizedResponse: getUnauthorizedResponse,
     challenge: true,
   }), async (req, res) => {
-  console.log('id:', req.query.id)
   await deleteRow(req.query.id);
   res.send('<h1>Byyyye data!!</h1>');
 })
@@ -145,14 +144,13 @@ app.post('/update', upload.none(), basicAuth({
     unauthorizedResponse: getUnauthorizedResponse,
     challenge: true,
   }), async (req, res) => {
-      const { id, filename, artist, title, year } = req.body;
+      const { filename, artist, title, year } = req.body;
       console.log(req.body)
       try {
         const result = await Catalog.update(
           { filename, title, artist, year},
           { where: { filename } }
         )
-        console.log(result)
       } catch (e) {
         console.error(e)
       }
@@ -178,15 +176,11 @@ async function deleteRow(id) {
     if (err) console.log(err, err.stack);
     else     console.log(data);
   })
-
-  console.log(del)
-
 }
 
 
 
 async function uploadFile(source, targetName, res) {
-  console.log('source:', source, 'target:', targetName);
 
   const fileStream = fs.createReadStream('./uploads/' + targetName);
 
@@ -204,12 +198,10 @@ async function uploadFile(source, targetName, res) {
     })
 
   fs.unlink(source, (err) => console.log(err));
-
-  console.log('Sweet!!!', upload);
 }
 
 const port = '8080';
-// const ip = '172.31.63.2';
-const ip = 'localhost';
+const ip = '172.31.63.2';
+// const ip = 'localhost';
 
 app.listen(port, ip, () => console.log(`Running on http://${ip}:${port}/`));
