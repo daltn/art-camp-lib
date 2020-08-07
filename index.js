@@ -202,6 +202,5 @@ async function uploadFile(source, targetName, res) {
 
 const port = '8080';
 const ip = '172.31.63.2';
-// const ip = 'localhost';
 
 app.listen(port, ip, () => console.log(`Running on http://${ip}:${port}/`));

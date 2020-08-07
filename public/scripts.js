@@ -10,7 +10,6 @@ async function getRandom(img) {
   try {
     let response = await fetch(
       `http://artcamplibrary.com/get`
-      // `http://localhost:8080/get`
     );
     let { filename, artist, title, year } = await response.json();
     let node = document.getElementById(img);
@@ -30,8 +29,7 @@ async function getRandom(img) {
 async function getCatalog() {
   try {
     let response = await fetch(
-      // `http://artcamplibrary.com/all`
-      `http://localhost:8080/all`
+      `http://artcamplibrary.com/all`
     );
     const catalog = await response.json();
     let node = document.querySelector('.init');
