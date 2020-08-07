@@ -173,9 +173,8 @@ async function deleteRow(id) {
    };
 
   let del = await s3.deleteObject(params, function(err, data) {
-    if (err) console.log(err, err.stack);
-    else     console.log(data);
-  })
+    if (err) console.log(err, err.stack)
+  }).promise()
 }
 
 
@@ -191,11 +190,9 @@ async function uploadFile(source, targetName, res) {
     ACL: 'public-read',
   };
 
-  let upload = await s3
-    .upload(params, (err, data) => {
+  let upload = await s3.upload(params, (err, data) => {
       if (err) console.log(err, err.stack);
-      else console.log(data);
-    })
+    }).promise()
 
   fs.unlink(source, (err) => console.log(err));
 }
