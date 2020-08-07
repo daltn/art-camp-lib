@@ -6,7 +6,6 @@ const fs = require('fs');
 const cred = require('./cred.js');
 const app = express();
 let Sequelize = require('sequelize');
-const Op = Sequelize.Op
 const basicAuth = require('express-basic-auth');
 const helmet = require('helmet');
 let bodyParser = require('body-parser')
@@ -39,7 +38,6 @@ const upload = multer({ storage: storage });
 const Catalog = sequelize.define('catalog', {
   id: {
     type: Sequelize.INTEGER,
-    autoIncrement: true,
     primaryKey: true,
     allowNull: false,
   },
@@ -117,6 +115,7 @@ app.post('/upload', upload.single('file'), async (req, res) => {
   uploadFile(req.file.path, req.file.filename, res);
 
   const catalogList = await getCatalog()
+
   let max = catalogList.length + 1;
   console.log('max', max)
 
@@ -135,8 +134,9 @@ app.get('/delete', basicAuth({
     users: { admin: cred.password },
     unauthorizedResponse: getUnauthorizedResponse,
     challenge: true,
-  }), (req, res) => {
-  deleteRow(req.query.id);
+  }), async (req, res) => {
+  console.log('id:', req.query.id)
+  await deleteRow(req.query.id);
   res.send('<h1>Byyyye data!!</h1>');
 })
 
@@ -145,12 +145,12 @@ app.post('/update', upload.none(), basicAuth({
     unauthorizedResponse: getUnauthorizedResponse,
     challenge: true,
   }), async (req, res) => {
-      const {id, filename, artist, title, year } = req.body;
-
+      const { id, filename, artist, title, year } = req.body;
+      console.log(req.body)
       try {
         const result = await Catalog.update(
-          { filename, title, artist, title, year},
-          { where: { _id: id } }
+          { filename, title, artist, year},
+          { where: { filename } }
         )
         console.log(result)
       } catch (e) {
@@ -161,9 +161,12 @@ app.post('/update', upload.none(), basicAuth({
 
 
 async function deleteRow(id) {
-  let n = await Catalog.destroy({ where: { id } });
+  let n = await Catalog.destroy({
+    where: {
+      filename: id,
+    }
+  })
   console.log(`number of deleted rows: ${n}`);
-  sequelize.close();
 }
 
 
@@ -195,7 +198,7 @@ async function uploadFile(source, targetName, res) {
 }
 
 const port = '8080';
-// const ip = '172.31.63.2';
-const ip = 'localhost';
+const ip = '172.31.63.2';
+// const ip = 'localhost';
 
 app.listen(port, ip, () => console.log(`Running on http://${ip}:${port}/`));
