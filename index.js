@@ -161,12 +161,26 @@ app.post('/update', upload.none(), basicAuth({
 
 
 async function deleteRow(id) {
-  let n = await Catalog.destroy({
+  const n = await Catalog.destroy({
     where: {
       filename: id,
     }
   })
+
   console.log(`number of deleted rows: ${n}`);
+
+  const params = {
+    Bucket: BUCKET,
+    Key: id
+   };
+
+  let del = await s3.deleteObject(params, function(err, data) {
+    if (err) console.log(err, err.stack);
+    else     console.log(data);
+  })
+
+  console.log(del)
+
 }
 
 
@@ -174,31 +188,28 @@ async function deleteRow(id) {
 async function uploadFile(source, targetName, res) {
   console.log('source:', source, 'target:', targetName);
 
-  let fileStream = fs.createReadStream('./uploads/' + targetName);
+  const fileStream = fs.createReadStream('./uploads/' + targetName);
 
-  let params = {
+  const params = {
     Bucket: BUCKET,
     Key: targetName,
     Body: fileStream,
     ACL: 'public-read',
   };
 
-  let storage = await s3
+  let upload = await s3
     .upload(params, (err, data) => {
-      console.log(err, data);
-      return res.send("Didn't work :(");
+      if (err) console.log(err, err.stack);
+      else console.log(data);
     })
-    .promise();
-
-  console.log(storage.Location);
 
   fs.unlink(source, (err) => console.log(err));
 
-  console.log('Sweet!!!');
+  console.log('Sweet!!!', upload);
 }
 
 const port = '8080';
-const ip = '172.31.63.2';
-// const ip = 'localhost';
+// const ip = '172.31.63.2';
+const ip = 'localhost';
 
 app.listen(port, ip, () => console.log(`Running on http://${ip}:${port}/`));
