@@ -6,4 +6,3 @@ node_modules/
 .env*
 cred.js
 .elasticbeanstalk/
-db/catalog.db
