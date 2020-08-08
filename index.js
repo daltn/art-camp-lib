@@ -111,10 +111,7 @@ app.get('/all', async (req, res) => {
 })
 
 app.post('/upload', upload.single('file'), async (req, res) => {
-  console.log('start req')
-  req.connection.setTimeout(100000);
   await uploadFile(req.file.path, req.file.filename);
-  console.log('after upload - before list')
 
   const catalogList = await getCatalog()
 
@@ -175,7 +172,7 @@ async function deleteRow(id) {
     Key: id
    };
 
-  let del = await s3.deleteObject(params, function(err, data) {
+  await s3.deleteObject(params, function(err, data) {
     if (err) console.log(err, err.stack)
   }).promise()
 }
@@ -183,7 +180,6 @@ async function deleteRow(id) {
 
 
 async function uploadFile(source, targetName) {
-  console.log('before filestream')
 
   const fileStream = fs.createReadStream('./uploads/' + targetName);
 
@@ -194,24 +190,16 @@ async function uploadFile(source, targetName) {
     ACL: 'public-read',
   };
 
-  console.log('before upload')
-
   await s3.upload(params, (err, data) => {
       if (err) console.log(err, err.stack);
     }).promise().then( res => {
       console.log(res)
       fs.unlink(source, (err) => console.log(err));
     })
-
-    console.log('after upload')
 }
 
 const port = '8080';
 const ip = '172.31.63.2';
-// const ip= 'localhost'
 
 app.listen(port, ip, () => console.log(`Running on http://${ip}:${port}/`));
 
-app.on('connection', (socket) => {
-  socket.setTimeout(80 * 1000);
-});
