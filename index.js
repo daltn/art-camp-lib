@@ -195,7 +195,7 @@ async function uploadFile(source, targetName) {
 
   console.log('before upload')
 
-  let upload = await s3.upload(params, (err, data) => {
+  await s3.upload(params, (err, data) => {
       if (err) console.log(err, err.stack);
     }).promise().then( res => {
       console.log(res)
