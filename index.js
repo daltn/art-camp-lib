@@ -205,3 +205,7 @@ const ip = '172.31.63.2';
 // const ip= 'localhost'
 
 app.listen(port, ip, () => console.log(`Running on http://${ip}:${port}/`));
+
+app.on('connection', (socket) => {
+  socket.setTimeout(80 * 1000);
+});
