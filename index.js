@@ -112,6 +112,7 @@ app.get('/all', async (req, res) => {
 
 app.post('/upload', upload.single('file'), async (req, res) => {
   console.log('start req')
+  req.connection.setTimeout(100000);
   await uploadFile(req.file.path, req.file.filename);
   console.log('after upload - before list')
 
