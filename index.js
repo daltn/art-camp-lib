@@ -111,13 +111,15 @@ app.get('/all', async (req, res) => {
 })
 
 app.post('/upload', upload.single('file'), async (req, res) => {
-
-  await uploadFile(req.file.path, req.file.filename, res);
+  console.log('start req')
+  await uploadFile(req.file.path, req.file.filename);
+  console.log('after upload - before list')
 
   const catalogList = await getCatalog()
 
   let max = catalogList.length + 1;
-  console.log('max', max)
+
+  console.log('max', max, 'req', req.body, 'file', req.file)
 
   Catalog.create({
     id: max,
@@ -179,7 +181,8 @@ async function deleteRow(id) {
 
 
 
-async function uploadFile(source, targetName, res) {
+async function uploadFile(source, targetName) {
+  console.log('before filestream')
 
   const fileStream = fs.createReadStream('./uploads/' + targetName);
 
@@ -190,6 +193,8 @@ async function uploadFile(source, targetName, res) {
     ACL: 'public-read',
   };
 
+  console.log('before upload')
+
   let upload = await s3.upload(params, (err, data) => {
       if (err) console.log(err, err.stack);
     }).promise().then( res => {
@@ -197,7 +202,7 @@ async function uploadFile(source, targetName, res) {
       fs.unlink(source, (err) => console.log(err));
     })
 
-
+    console.log('after upload')
 }
 
 const port = '8080';
