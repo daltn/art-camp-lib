@@ -9,7 +9,8 @@ async function getRandom(img) {
   }
   try {
     let response = await fetch(
-      `http://artcamplibrary.com/get`
+      // `http://artcamplibrary.com/get`
+      `http://localhost:8080/get`
     );
     let { filename, artist, title, year } = await response.json();
     let node = document.getElementById(img);
@@ -95,4 +96,17 @@ const hammerTwo = new Hammer(imgTwo)
 
 hammerOne.on('swipe', () => toggleMobileInfo('one'))
 hammerTwo.on('swipe', () => toggleMobileInfo('two'))
+
+document.onkeydown = checkKey;
+
+function checkKey(e) {
+    e = e || window.event
+
+    if (e.keyCode == '37') {
+      getRandom('one')
+    }
+    else if (e.keyCode == '39') {
+       getRandom('two')
+    }
+}
 
