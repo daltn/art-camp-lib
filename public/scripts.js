@@ -26,6 +26,53 @@ async function getRandom(img) {
   }
 }
 
+const info = document.querySelector('.info');
+const modal = document.querySelector('.modal');
+
+info.onclick = function () {
+  modal.style.display = 'block';
+};
+
+modal.onclick = function () {
+  modal.style.display = 'none';
+};
+
+function toggleMobileInfo(key) {
+  console.log('yuuur')
+  key === 'one' ?
+  imgOne.classList.toggle('blur') :
+  imgTwo.classList.toggle('blur')
+}
+
+let viewportWidth
+
+function setViewport() {
+  viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+}
+
+setViewport()
+
+window.addEventListener('resize', setViewport)
+
+const clickFuncSwap = (id) => {
+  console.log('ee', id)
+  if(viewportWidth > 600) getRandom(id)
+  else toggleMobileInfo(id)
+}
+
+const imgOne = document.querySelector('#one')
+const imgTwo = document.querySelector('#two')
+
+imgOne.onclick = () => clickFuncSwap('one')
+imgTwo.onclick = () => clickFuncSwap('two')
+
+const hammerOne = new Hammer(imgOne)
+const hammerTwo = new Hammer(imgTwo)
+
+hammerOne.on('swipe', () => getRandom('one'))
+hammerTwo.on('swipe', () => getRandom('two'))
+
+
 async function getCatalog() {
   try {
     let response = await fetch(
@@ -47,16 +94,6 @@ async function getCatalog() {
   }
 }
 
-let viewportWidth
-
-function setViewport() {
-  viewportWidth = window.innerWidth || document.documentElement.clientWidth;
-}
-
-setViewport()
-
-window.addEventListener('resize', setViewport)
-
 async function init() {
   getRandom('one');
   getRandom('two');
@@ -69,32 +106,6 @@ function fileCheck(file) {
     return file;
   }
 }
-
-const info = document.querySelector('.info');
-const modal = document.querySelector('.modal');
-
-info.onclick = function () {
-  modal.style.display = 'block';
-};
-
-modal.onclick = function () {
-  modal.style.display = 'none';
-};
-
-const imgOne = document.querySelector('#one')
-const imgTwo = document.querySelector('#two')
-
-function toggleMobileInfo(key) {
-  key === 'one' ?
-  imgOne.classList.toggle('blur') :
-  imgTwo.classList.toggle('blur')
-}
-
-const hammerOne = new Hammer(imgOne)
-const hammerTwo = new Hammer(imgTwo)
-
-hammerOne.on('swipe', () => toggleMobileInfo('one'))
-hammerTwo.on('swipe', () => toggleMobileInfo('two'))
 
 document.onkeydown = checkKey;
 
