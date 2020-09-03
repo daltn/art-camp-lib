@@ -38,7 +38,6 @@ modal.onclick = function () {
 };
 
 function toggleMobileInfo(key) {
-  console.log('yuuur')
   key === 'one' ?
   imgOne.classList.toggle('blur') :
   imgTwo.classList.toggle('blur')
@@ -55,7 +54,6 @@ setViewport()
 window.addEventListener('resize', setViewport)
 
 const clickFuncSwap = (id) => {
-  console.log('ee', id)
   if(viewportWidth > 600) getRandom(id)
   else toggleMobileInfo(id)
 }

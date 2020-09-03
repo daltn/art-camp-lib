@@ -111,23 +111,28 @@ app.get('/all', async (req, res) => {
 })
 
 app.post('/upload', upload.single('file'), async (req, res) => {
-  await uploadFile(req.file.path, req.file.filename);
+  const ext = req.file.filename.slice(-3)
+  if(ext !== 'jpg') {
+    res.send('<h1>Whooops - only upload files with .jpg as the file extension</h1>')
+  } else {
+    await uploadFile(req.file.path, req.file.filename);
 
-  const catalogList = await getCatalog()
+    const catalogList = await getCatalog()
 
-  let max = catalogList.length + 1;
+    let max = catalogList.length + 1;
 
-  console.log('max', max, 'req', req.body, 'file', req.file)
+    console.log('max', max, 'req', req.body, 'file', req.file)
 
-  Catalog.create({
-    id: max,
-    filename: req.file.filename,
-    artist: req.body.artist,
-    title: req.body.title,
-    year: req.body.year,
-  });
+    Catalog.create({
+      id: max,
+      filename: req.file.filename,
+      artist: req.body.artist,
+      title: req.body.title,
+      year: req.body.year,
+    });
 
-  res.send('<h1>Yuuuur!!</h1>');
+    res.send('<h1>Yuuuur!!</h1>');
+  }
 });
 
 app.get('/delete', basicAuth({
