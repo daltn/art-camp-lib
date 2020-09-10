@@ -9,7 +9,7 @@ async function getRandom(img) {
   }
   try {
     let response = await fetch(
-      `http://artcamplibrary.com/get`
+      `https://artcamplibrary.com/get`
     );
     let { filename, artist, title, year } = await response.json();
     let node = document.getElementById(img);
@@ -74,7 +74,7 @@ hammerTwo.on('swipe', () => getRandom('two'))
 async function getCatalog() {
   try {
     let response = await fetch(
-      `http://artcamplibrary.com/all`
+      `https://artcamplibrary.com/all`
     );
     const catalog = await response.json();
     let node = document.querySelector('.init');
