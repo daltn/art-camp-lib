@@ -68,9 +68,9 @@ img {
   top: 0;
   width: 100%;
   height: 100%;
-  overflow: auto;
+  overflow: scroll;
   color: #fff;
-  padding: 2rem;
+  padding: 0 2rem;
   background: rgba(19, 19, 19, 0.85);
 }
 
@@ -94,7 +94,6 @@ h2 {
 .modal p:first-of-type {
   margin-top: 2.5rem;
 }
-
 
 a {
   color: #fff;
